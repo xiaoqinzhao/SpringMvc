@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>201631107110赵小钦</title>
+    <script src="/jquery.js"></script>
+    <style>
+        .login-form-mask {
+            z-index: 9998;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            opacity: 0.4;
+            filter: alpha(opacity=40);
+            display: none;
+        }
+        .login-form {
+            z-index: 9999;
+            position: fixed;
+            top: 40%;
+            left: 55%;
+            width: 520px;
+            height: 400px;
+            margin: -180px 0 0 -330px;
+            border-radius: 10px;
+            border: solid 2px #666;
+            background-color: rgba(60,60,60,0.8);
+            display: none;
+            box-shadow: 0 0 10px #666;
+        }
+        .login-close {
+            margin-left: 95%;
+        }
+        h3.loginlabel{
+            font-size: 30px;
+            text-align: center;
+            color: aqua;
+            -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+        }
+        label.username{
+            color: aqua;
+            -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+            font-size: 20px;
+            display: inline-block;
+            width: 5em;
+            text-align: right;
+        }
+        input.uname{
+            color: aqua;
+            -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+            background-color: rgba(0,0,0,0.5);
+            width: 45%;
+            height: 25px;
+            font-size: 16px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        input.uname:focus{
+            border-color: red;
+        }
+        div.input{
+            margin-left: 12%;
+        }
+        div.form-group{
+            text-align: center;
+        }
+        #submit{
+            margin-top: 15px;
+            background-color: rgba(0,0,0,0.5);
+            -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+            width: 35%;
+            height: 40px;
+            color: aqua;
+        }
+        #submit:hover{
+            background-color:orange;
+        }
+        span.tip{
+            color: red;
+            font-size: 14px;
+            text-align: center;
+        }
+        #usernametip{
+            color: black;
+            font-size: 10px;
+            display: block;
+            text-align: center;
+        }
+        #tip{
+            color: red;
+            font-size: 14px;
+            text-align: center;
+            display: block;
+        }
+    </style>
+    <script>
+        //设置登录页面弹出效果
+        $(document).ready(function($) {
+            $('.login-form-mask').fadeIn(100);
+            $('.login-form').slideDown(200);
+            $('.login-close').click(function() {
+                $('.login-form-mask').fadeOut(100);
+                $('.login-form').slideUp(200);
+            });
+            $('#close').click(function () {
+                history.go(-1);
+            });
+            $('#submit').click(function () {
+                if(check())
+                {
+                    $.post("/question/reg",{
+                        name:$('#username').val(),
+                        password:$('#password').val()
+                    },
+                        function (data) {
+                            if(data)
+                            {
+                                $('#tip').text('注册成功！');
+                            }else{
+                                $('#tip').text('注册失败！');
+                            }
+                        }
+                );
+                }
+            });
+        });
+
+        function check(){
+            var username=document.getElementById("username");
+            var password=document.getElementById("password");
+            var confirmpassword=document.getElementById("confirmpassword");
+
+            return focuscheck(username)&&focuscheck(password)&&focuscheck(confirmpassword);
+        }
+        function focuscheck(obj) {
+            var info=obj.value;
+            var tip=obj.nextElementSibling;
+
+            tip.innerText="";
+            switch(obj.id)
+            {
+                case 'username':
+                {
+                    myReg=/^[a-zA-Z][a-zA-Z0-9_]{5,7}$/;
+                    if(!myReg.test(info))
+                    {
+                        tip.innerText="用户名格式不正确！";
+                        return false;
+                    }
+                    break;
+                }
+                case 'password':{
+                    if(info.length<6||info.length>12)
+                    {
+                        tip.innerText="密码长度应为6-12";
+                        return false;
+                    }
+                    break;
+                }
+                case 'confirmpassword':
+                {
+                    if(info!=$('#password').val())
+                    {
+                        tip.innerText="两次密码输入不一致";
+                        return false;
+                    }
+                    break;
+                }
+                default:return false;
+            }
+            return true;
+        }
+
+    </script>
+
+</head>
+<body>
+<div class="login-form">
+    <div class="login-header">
+        <a href="javascript:;" title="关闭" id="close" class="login-close close">×</a>
+        <h3 class="loginlabel">用户注册</h3>
+        <span id="tip"></span>
+    </div>
+    <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1">
+            <div class="input">
+                <label class="username">用户名:</label>
+                <input onfocusout="focuscheck(this)" type="text" class="uname" id="username" name="username" autocomplete="off" spellcheck="false" placeholder="请输入手机号">
+                <span class="tip"></span>
+                <span id="usernametip">6~8个字符，可使用字母，数字，下划线，需以字母开头</span>
+            </div>
+            <div class="input">
+                <label class="username">密码:</label>
+                <input onfocusout="focuscheck(this)" type="password" class="uname" id="password" name="password" autocomplete="off" spellcheck="false" placeholder="请输入密码">
+                <span class="tip"></span>
+            </div>
+            <div class="input">
+                <label class="username">确认密码:</label>
+                <input onfocusout="focuscheck(this)" type="password" class="uname" id="confirmpassword" name="confirmpassword" autocomplete="off" spellcheck="false" placeholder="请再次输入密码">
+                <span class="tip"></span>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-info btn-lg btn-block" id="submit">注 册</button>
+            </div>
+    </div>
+</div>
+<div class="login-form-mask"></div>
+</body>
+</html>

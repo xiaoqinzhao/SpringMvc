@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html> 
+<html lang="en">
+ <head> 
+ <meta charset="UTF-8">
+  <title>hacker</title> 
+  <style> *{margin: 0;padding: 0;} canvas{display: block;} </style>
+   </head>
+    <body>
+     <canvas id="c"></canvas> 
+	 <script> document.addEventListener("DOMContentLoaded",function(){
+		  var oC=document.getElementById("c");
+		   var gt=oC.getContext("2d"); 
+		   oC.width=window.innerWidth; oC.height=window.innerHeight; var font=16; var txt="0123456789амнлсыиймлぅしさぉかそそぬさ"; txt=txt.split("");
+		   var col=oC.width/font; var arr=[]; 
+		   for(var i=0;i<col;i++){ arr[i]=1; } 
+		   function show(){ gt.fillStyle="rgba(0,0,0,0.05)";
+		    gt.fillRect(0,0,oC.width,oC.height); 
+			gt.fillStyle="green"; gt.font=font+"px arial"; 
+			for(var i=0;i<arr.length;i++){ 
+			 var oT=txt[Math.floor(Math.random()*txt.length)];
+			 gt.fillText(oT, i*font, arr[i]*font);
+			 if(arr[i]*font>oC.height || Math.random() > 0.95)
+			  arr[i] = 0;
+			  arr[i]++; } }
+			   setInterval(show,30); },false) </script> 
+               </body>
+                </html>
+

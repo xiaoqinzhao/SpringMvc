@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.newcoder.dao.QuestionDao">
+<sql id="TABLE_NAME">Question</sql>
+    <sql id="INSERT_FIELD">title,answer_id</sql>
+    <sql id="SELECT_FIELD">id,title ,answer_id</sql>
+    <select id="getRandomQuestion" resultType="com.example.newcoder.model.Question">
+        SELECT DISTINCT
+        <include refid="SELECT_FIELD"/>
+        FROM
+        <include refid="TABLE_NAME"/>
+        ORDER BY rand()
+        limit #{limit}
+    </select>
+</mapper>

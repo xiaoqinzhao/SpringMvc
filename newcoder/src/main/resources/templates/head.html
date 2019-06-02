@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        div.head{
+            width: 100%;
+            height: 100px;
+            background-color: rgba(0,0,0,0.5);
+            position:relative;
+        }
+        span.title{
+            font-size: 30px;
+            font-family: 宋体;
+            font-weight: bold;
+            color: aquamarine;
+            -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+            display: block;
+            position: absolute;
+            width: 5em;
+            top: 25%;
+            left: 45%;
+        }
+        span.nav-login{
+            color: orange;
+            position: absolute;
+            display: block;
+            left: 90%;
+            top: 25%;
+            text-decoration: none;
+            cursor: default;
+        }
+        span.nav-login:hover{
+            color: red;
+        }
+        img.head{
+            width: 3%;
+            height: 45%;
+            top: 16%;
+            left: 86%;
+            position: absolute;
+            background-color: rgba(0,0,0,0.1);
+            border-radius: 5em;
+        }
+    </style>
+    <script src="/jquery.js"></script>
+</head>
+<body>
+<div class="head">
+    <span class="title">体育答题</span>
+    <img class="head" src="/head.jpg">
+    <span id="nav-login" class="nav-login" ></span>
+</div>
+</body>
+</html>

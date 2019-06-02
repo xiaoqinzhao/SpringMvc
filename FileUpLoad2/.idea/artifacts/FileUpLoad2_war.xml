@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="FileUpLoad2:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>FileUpLoad2</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="yxq.war">
+      <element id="artifact" artifact-name="FileUpLoad2:war exploded" />
+    </root>
+  </artifact>
+</component>

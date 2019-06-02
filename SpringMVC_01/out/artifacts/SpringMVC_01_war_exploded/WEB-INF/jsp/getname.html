@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UserInfo</title>
+</head>
+<body>
+<script type="text/javascript">
+    var xmlHttpReq;
+    //创建一个XmlHttpRequest对象
+    function createXmlHttpRequest()
+    {
+        if(window.XMLHttpRequest)
+        {
+            xmlHttpReq = new XMLHttpRequest();//非IE浏览器
+        }else
+        {
+            xmlHttpReq = new ActiveXObject("Microsoft.XMLHTTP");//IE浏览器
+        }
+    }
+    function gethint()
+    {
+        var name=document.getElementById('name').value;
+        if(name.length<=0||name=="")
+        {
+            document.getElementById('hint').innerHTML="";
+        }else
+        {
+            createXmlHttpRequest();
+            xmlHttpReq.onreadystatechange=handle;
+            var url = "/SpringMVC_01_war_exploded/hint?name="+name;
+            xmlHttpReq.open("get",url,true);
+            xmlHttpReq.send(null);
+        }
+    }
+    function handle() {
+        //准备状态为4
+        if(xmlHttpReq.readyState==4)
+        {
+            //响应状态码为200，代表一切正常
+            if(xmlHttpReq.status==200)
+            {
+                var res = xmlHttpReq.responseText;
+                var result = document.getElementById("hint");
+                result.innerHTML = res;
+            }
+        }
+    }
+</script>
+name:<input id="name" type="text" onchange="gethint()"/>
+<p id="hint"></p>
+</body>
+</html>

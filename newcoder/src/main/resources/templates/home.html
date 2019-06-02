@@ -1,0 +1,320 @@
+<!DOCTYPE>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>体育知识答题</title>
+    <style type="text/css">
+        div.head{
+            width: 100%;
+            height: 100px;
+            background-color: rgba(0,0,0,0.5);
+            position:relative;
+        }
+        span.title{
+            font-size: 30px;
+            font-family: 宋体;
+            font-weight: bold;
+            color: aquamarine;
+            -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+            display: block;
+            position: absolute;
+            width: 5em;
+            top: 25%;
+            left: 45%;
+        }
+        span.nav-login{
+            color: orange;
+            position: absolute;
+            display: block;
+            left: 90%;
+            top: 25%;
+            text-decoration: none;
+            cursor: default;
+        }
+        span.nav-login:hover{
+            color: red;
+        }
+        img.head{
+            width: 3%;
+            height: 45%;
+            top: 16%;
+            left: 86%;
+            position: absolute;
+            background-color: rgba(0,0,0,0.1);
+            border-radius: 5em;
+        }
+        *{
+            padding:0;
+            margin:0;
+        }
+        p.title{
+            font-size: 16px;
+            font-family: 宋体;
+        }
+        div.title{
+            float: bottom;
+        }
+        span.content{
+            font-size: 14px;
+            text-align: center;
+        }
+        body{
+            background-repeat: repeat;
+            background-size: cover;
+            background-image: url(/star2.jpg);
+        }
+        form{
+            width: 50em;
+            color: aqua;
+            margin-left: auto;
+            margin-right: auto;
+            left: 400px;
+            top: 200px;
+            position: absolute;
+        }
+        input.submit:link{
+            background-color: aqua;
+            left: auto;
+            right: auto;
+        }
+        input.submit:hover{
+            background-color: red;
+            left: auto;
+            right: auto;
+        }
+        input.submit:active{
+            background-color: yellow;
+            left: auto;
+            right: auto;
+        }
+        #hacker{
+            z-index: 0;
+        }
+
+        input[type="radio"] {
+            display: none;
+            visibility: hidden;
+            width: 0px;
+            height: 0px;
+            margin: 0px;
+            padding: 0px;
+        }
+        input[type="radio"]+label {
+            background: url(/notcheck.jpg) no-repeat;
+            background-size: 25.5px 46.5px;
+            vertical-align: middle;
+            height: 46.5px;
+            width: 25.5px;
+            display: inline-block;
+        }
+        input[type="radio"]:checked+label {
+            background: url(/check.jpg) no-repeat;
+            background-size: 25.5px 46.5px;
+        }
+        #submit{
+            width: 75px;
+            height: 50px;
+            border-radius:5px;
+            padding: 10px;
+            color: cornflowerblue;
+            -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+            position: fixed;
+            left: 700px;
+            bottom: 20px;
+        }
+        #submit:hover{
+            background-color:orange;
+        }
+        #head{
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            border: 0px;
+            z-index: 999;
+        }
+    </style>
+    <script src="/jquery.js"></script>
+    <script>
+        function Answer(id,content,typeid) {
+            this.id=id;
+            this.content=content;
+            this.typeid=typeid;
+        }
+        function check() {//验证表单
+            try {
+                var answers=new Array();
+                var form = document.getElementById("myform");//获取表单数据
+                var tagElements = form.getElementsByTagName('div');
+                for (var i = 0; i < tagElements.length; i++) {
+                    var radios = tagElements[i].getElementsByTagName('input');
+                    var flag = false;
+                    for (var j = 0; j < radios.length; j++) {
+                        if (radios[j].checked) {
+                            flag = true;
+                            var answer=new Answer(radios[j].value,'',radios[j].name);
+                            answers.push(answer);//放入答案
+                            break;
+                        }
+                    }
+                    if (!flag) {
+                        alert(tagElements[i].id.replace('t','') + "号题目未做完!");
+                        location.href = "#" + tagElements[i].id;
+                        return null;
+                    }
+                }
+                return answers;
+            }catch(e)
+            {
+                console.log(e.name + ": " + e.message);
+                return false;
+            }
+        }
+        function load()
+        {
+            var username='${username}';
+            if(username){
+                document.getElementById("nav-login").innerText=username;
+            }
+            var str='${adapters}';
+            var adapters = JSON.parse(str);
+            for(var i=0;i<adapters.length;i++)
+            {
+                var title=adapters[i].question;
+                var div=document.createElement("div");
+                div.id="t"+(i+1);
+                div.className="title";
+                var p=document.createElement("p");
+                p.innerHTML=(i+1)+"."+title+":";
+                div.appendChild(p);
+                document.getElementById("myform").appendChild(div);
+
+                for(var j=0;j<adapters[i].answer.length;j++)
+                {
+                    var answer=adapters[i].answer[j].content;
+                    var question_id=adapters[i].answer[j].typeid;
+                    var id=adapters[i].answer[j].id;
+                    var num="";
+                    switch (j) {
+                        case 0:num="A";break;
+                        case 1:num="B";break;
+                        case 2:num="C";break;
+                        case 3:num="D";break;
+                    }
+
+                    var input=document.createElement("input");
+                    input.type="radio";
+                    input.name=question_id;
+                    input.value=id;
+                    input.id=id;
+
+
+                    var label=document.createElement("label");
+                    label.setAttribute("for",id);
+
+                    var text=document.createElement("span");
+                    text.innerText=num+"."+answer;
+
+                    var br=document.createElement("span");
+                    br.innerHTML="<br>";
+
+                    div.appendChild(br);
+                    div.appendChild(input);
+                    div.appendChild(label);
+                    div.appendChild(text);
+                }
+            }
+        }
+        var xmlhttp;
+        function send(){
+            if (window.XMLHttpRequest)
+            {
+                // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+                xmlhttp=new XMLHttpRequest();
+            }
+            else
+            {
+                // IE6, IE5 浏览器执行代码
+                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            //xmlhttp.open("GET","/phpbin/try/ajax/gethint.php?q="+str,true);
+
+
+            var answers=check();
+            if(answers!=null)
+            {
+                try {
+                    var json_data = JSON.stringify(answers);//转json字符串
+                    xmlhttp.open("GET", "/question/checkdetail?data="+json_data, true);
+                    xmlhttp.onreadystatechange=callback;
+                    // xmlhttp.dataType="json";
+                    // xmlhttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;");
+                    xmlhttp.send(null);
+                }catch(e)
+                {
+                    console.log("error:"+e.toString());
+                }
+            }
+        }
+        function callback()
+        {//回调函数 用于显示成绩
+            var jsonstr="";
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                try {
+                    var json_str = xmlhttp.responseText;
+                    var scoreAdapter = JSON.parse(json_str);
+                    var first_mistake=new Array();
+                    alert("your score is "+scoreAdapter.score);
+                    for(var i=0;i<scoreAdapter.scores.length;i++)
+                    {
+                        var score = scoreAdapter.scores[i];
+                        if(!score.isright)
+                        {
+                            first_mistake.push(i+1);
+                            var questionid=score.questionid;
+                            var answerid=score.answerid;
+                            var radio= document.getElementById(answerid);
+                            var span = radio.nextElementSibling.nextElementSibling;
+                            span.style.backgroundColor="red";
+                        }
+                    }
+                    if(first_mistake.length>0) {
+                        location.href = '#t' + first_mistake[0];
+                    }
+                }catch (e) {
+                    console.log("error:"+e.toString());
+                }
+            }
+        }
+        $(function () {
+            var obj=$('#nav-login');
+            obj.click(function () {
+                if(confirm("您确定要注销?")) {
+                    $.get("/question/logoff", function (data) {
+                        if (data) {
+                            alert("注销成功!");
+                            $(location).attr("href", "/question/loginpage");
+                        } else {
+                            alert("注销失败");
+                        }
+                    });
+                }
+                });
+        });
+    </script>
+</head>
+<body id="body" onload="load()">
+<div class="head">
+    <span class="title">体育答题</span>
+    <img class="head" src="/head.jpg">
+    <span id="nav-login" class="nav-login" ></span>
+</div>
+<!--HTML-->
+<h1 style="text-align: center;position: absolute;left: 400px;top: 100px;-webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));text-decoration: none;color: #d88;text-align: center;";>体育知识答题</h1>
+<form id='myform'  method="post">
+</form>
+<button id="submit" onclick="send()">提交</button>
+
+</body>
+</html>
